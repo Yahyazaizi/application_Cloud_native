@@ -1,0 +1,149 @@
+getcomposer.org 
+logicielle pour installer une bibliotheque exemple : laravel
+composer global require laravel/installer
+cd C:\xampp\htdocs
+laravel new laravel1
+routes
+masterpage
+
+aujourd'hui routes
+php artisan  serve
+
+http://127.0.0.1:8000
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+requette de type http 
+fin bghit nmchi + methode
+'/' alias
+http://127.0.0.1:8000/w        page welcome
+
+
+
+Route::get('/b', function () {
+    return "<h1>Bonsoir</h1>";
+});
+creation de page dans views dans resources
+page1.blade.php
+
+Route::any('/p2', function () {
+    return view('page2');
+});
+
+Route::match(['GET','POST'],'/p2', function () {
+    return view('page2');
+});
+
+Route::fallback(function () {
+    return view('erreur');
+});
+
+
+:: == mean classe static (Route)
+
+
+Route::redirect('ici','/p2');
+
+
+Route::get('/f1', function () {
+    return view('filter1');
+});
+Route::get('/f2', function () {
+    return view('filter2');
+});
+
+Route::get('/f1', function () {
+    $v = request('Type');
+    if ($v == 'D') {
+        return "<h1>Diesel</h1>";
+    } else if ($v == 'H') {
+        return "<h1>Hybrid</h1>";
+    } else {
+        return view('filter2');
+    }
+});
+
+http://127.0.0.1:8000/f1?Type=D
+
+
+Route::get('/f2/{v?}', function ($v=null) {
+    if ($v == 'D') {
+        return "<h1>Diesel</h1>";
+    } else if ($v == 'H') {
+        return "<h1>Hybrid</h1>";
+    } else {
+        return view('filter2');
+    }
+});
+
+http://127.0.0.1:8000/f2/D
+
+
+
+-----------------------------------------------------------
+pour que le contreller heriter d'autres classes
+php artisan make:Controller croute
+
+-----------------------------------------------------
+seance2
+----------------------------------------------------
+
+<title>@yield('p')</title>
+<nav>
+    <a href="{{Route('page1')}}">page1</a>
+    <a href="{{Route('page2')}}">page2</a>
+    <a href="{{Route('page3')}}">page3</a>
+</nav>
+<h1>Bienvenue dans la @yield('p')</h1>
+
+-----------------------------------------------------
+creation css file dans folder css dans folder public
+------------------------------------------------------
+creation de contrelleur:
+php artisan make:Controller -r rroute
+
+il y a des methodes vides dans ce controlleur
+-----------------------------------------------------
+{{print_r($V)}}
+=-------------------------------------------
+@extends('model')
+@section('p','BMW')
+<h1>La voiture</h1>
+@foreach($V as $V)
+<a href="{{Route('action.show', $V['Mat'])}}">{{$V['Marque']}}</a><br>
+@endforeach
+
+------------------------------------------------------
+chaque voiture :
+
+-------------------------------------------------------
+base de donnees :
+
+--------------------------------------------------------
+php artisan make:Model voiture --migration 
+=> for creation of voiture in models and voitures table in migrations
+---------------------------------------------------
+public function up(): void
+    {
+        Schema::create('voitures', function (Blueprint $table) {
+            $table->id();
+            $table->string('Matricule')->primary();
+            $table->string('Marque');
+            $table->string('Type');
+            $table->timestamps();
+        });
+    }
+
+-------------------------------------------------------------
+INSERT INTO `voitures` (`Matricule`, `Marque`, `Type`) 
+VALUES
+('1234', 'BMW', 'Diesel'),
+('5678', 'Mercedes', 'Diesel'),
+('9012', 'Range Rover', 'Diesel'),
+('3456', 'Ford', 'Hybrid'),
+('7890', 'Audi', 'Electric');
+
+----------------------------------------------------------
+ php artisan migrate
